@@ -8,6 +8,7 @@ import {
   LoanDetail,
 } from '../data/amortizationData';
 import { formatCurrency } from '../utils/formatters';
+import { Printer } from 'lucide-react';
 
 // --- Helper Components ---
 
@@ -68,17 +69,13 @@ const AmortizationSchedulePage: React.FC = () => {
         className={`border-b border-gray-300 ${isTotal ? 'font-bold bg-gray-100' : 'hover:bg-gray-50'}`}
       >
         {cells.map((cell, index) => {
-          const isNumeric = index >= 2 && index <= 8;
+          const isCurrencyField = index >= 2 && index <= 8;
           const isStatus = index === 9 && !isTotal;
-          const isCapitalRestant = index === 2 && !isTotal;
 
           let content = cell;
           let alignment = 'text-left';
 
-          if (isNumeric) {
-            content = formatCurrency(cell as number);
-            alignment = 'text-right';
-          } else if (isCapitalRestant) {
+          if (isCurrencyField) {
             content = formatCurrency(cell as number);
             alignment = 'text-right';
           } else if (isStatus) {
@@ -103,9 +100,25 @@ const AmortizationSchedulePage: React.FC = () => {
       </tr>
     );
   };
+  
+  const handlePrint = () => {
+    window.print();
+  };
 
   return (
     <div className="p-4 md:p-8 bg-white min-h-screen">
+      
+      {/* Print Button - Hidden when printing */}
+      <div className="flex justify-end mb-4 max-w-5xl mx-auto print:hidden">
+        <button
+          onClick={handlePrint}
+          className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-md"
+        >
+          <Printer size={18} />
+          <span>Imprimer le Tableau</span>
+        </button>
+      </div>
+
       {/* 1. Header Section */}
       <header className="mb-8 border-b pb-4">
         <div className="text-center mb-4">
