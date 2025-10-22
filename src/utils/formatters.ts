@@ -1,8 +1,8 @@
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
+    currency: 'TND',
+    minimumFractionDigits: 3,
   }).format(amount);
 };
 
