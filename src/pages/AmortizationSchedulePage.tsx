@@ -140,44 +140,46 @@ const AmortizationSchedulePage: React.FC = () => {
       </div>
 
       {/* 3. Amortization Table */}
-      <section className="overflow-x-auto shadow-lg border border-gray-300 max-w-full mx-auto">
-        <table className="min-w-full divide-y divide-gray-300 border-collapse">
-          <thead>
-            <tr className="bg-gray-700 text-white text-xs uppercase tracking-wider">
-              {tableHeaders.map((header, index) => (
-                <th
-                  key={header}
-                  className={`p-2 font-semibold border-r border-gray-600 ${
-                    index >= 2 && index <= 8 ? 'text-right' : 'text-left'
-                  }`}
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {/* Data Rows */}
-            {amortizationData.map((row) => renderRow(row))}
+      <section className="shadow-lg border border-gray-300 max-w-full mx-auto">
+        <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
+          <table className="min-w-full divide-y divide-gray-300 border-collapse">
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-gray-700 text-white text-xs uppercase tracking-wider">
+                {tableHeaders.map((header, index) => (
+                  <th
+                    key={header}
+                    className={`p-2 font-semibold border-r border-gray-600 ${
+                      index >= 2 && index <= 8 ? 'text-right' : 'text-left'
+                    }`}
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {/* Data Rows */}
+              {amortizationData.map((row) => renderRow(row))}
 
-            {/* Totals Row */}
-            {renderRow(
-              {
-                n: 0,
-                echeance: '',
-                capitalRestant: 0, // Not summed
-                amortissement: amortizationTotals.amortissement,
-                interets: amortizationTotals.interets,
-                assVie: amortizationTotals.assVie,
-                assInc: amortizationTotals.assInc,
-                intAdd: amortizationTotals.intAdd,
-                mensualite: amortizationTotals.mensualite,
-                statut: 'PAYÉE', // Placeholder, unused in total row
-              },
-              true
-            )}
-          </tbody>
-        </table>
+              {/* Totals Row */}
+              {renderRow(
+                {
+                  n: 0,
+                  echeance: '',
+                  capitalRestant: 0, // Not summed
+                  amortissement: amortizationTotals.amortissement,
+                  interets: amortizationTotals.interets,
+                  assVie: amortizationTotals.assVie,
+                  assInc: amortizationTotals.assInc,
+                  intAdd: amortizationTotals.intAdd,
+                  mensualite: amortizationTotals.mensualite,
+                  statut: 'PAYÉE', // Placeholder, unused in total row
+                },
+                true
+              )}
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );

@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Print Optimization */
+@media print {
+  /* Ensure background colors are printed */
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: white !important;
+  }
+  
+  /* Hide elements not needed in the report (like the print button, already handled by print:hidden) */
+  .print-hidden {
+    display: none !important;
+  }
+
+  /* Ensure tables look clean */
+  table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  
+  /* Ensure text is black for readability */
+  * {
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* Ensure borders are visible */
+  td, th {
+    border: 1px solid #ccc !important;
+  }
+}
