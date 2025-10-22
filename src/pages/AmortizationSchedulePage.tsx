@@ -1,15 +1,14 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import {
   loanDetails,
   contractDetails,
   amortizationData,
+  amortizationTotals,
   AmortizationRow,
   LoanDetail,
-  calculateTotals,
 } from '../data/amortizationData';
 import { formatCurrency } from '../utils/formatters';
 import { Printer } from 'lucide-react';
-import StatusFilter from '../components/StatusFilter';
 
 // --- Helper Components ---
 
@@ -37,19 +36,6 @@ const InfoTable: React.FC<InfoTableProps> = ({ data }) => (
 );
 
 const AmortizationSchedulePage: React.FC = () => {
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
-
-  const filteredData = useMemo(() => {
-    if (!statusFilter) {
-      return amortizationData;
-    }
-    return amortizationData.filter(row => row.statut === statusFilter);
-  }, [statusFilter]);
-
-  const currentTotals = useMemo(() => {
-    return calculateTotals(filteredData);
-  }, [filteredData]);
-
   const tableHeaders = [
     'Nº',
     'Échéance',
@@ -154,56 +140,44 @@ const AmortizationSchedulePage: React.FC = () => {
       </div>
 
       {/* 3. Amortization Table */}
-      <section className="max-w-5xl mx-auto">
-        {/* Filter UI */}
-        <StatusFilter currentFilter={statusFilter} onFilterChange={setStatusFilter} />
+      <section className="overflow-x-auto shadow-lg border border-gray-300 max-w-full mx-auto">
+        <table className="min-w-full divide-y divide-gray-300 border-collapse">
+          <thead>
+            <tr className="bg-gray-700 text-white text-xs uppercase tracking-wider">
+              {tableHeaders.map((header, index) => (
+                <th
+                  key={header}
+                  className={`p-2 font-semibold border-r border-gray-600 ${
+                    index >= 2 && index <= 8 ? 'text-right' : 'text-left'
+                  }`}
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {/* Data Rows */}
+            {amortizationData.map((row) => renderRow(row))}
 
-        <div className="overflow-x-auto shadow-lg border border-gray-300 max-w-full">
-          <table className="min-w-full divide-y divide-gray-300 border-collapse">
-            <thead>
-              <tr className="bg-gray-700 text-white text-xs uppercase tracking-wider">
-                {tableHeaders.map((header, index) => (
-                  <th
-                    key={header}
-                    className={`p-2 font-semibold border-r border-gray-600 ${
-                      index >= 2 && index <= 8 ? 'text-right' : 'text-left'
-                    }`}
-                  >
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {/* Data Rows */}
-              {filteredData.map((row) => renderRow(row))}
-
-              {/* Totals Row */}
-              {filteredData.length > 0 && renderRow(
-                {
-                  n: 0,
-                  echeance: '',
-                  capitalRestant: 0, // Not summed
-                  amortissement: currentTotals.amortissement,
-                  interets: currentTotals.interets,
-                  assVie: currentTotals.assVie,
-                  assInc: currentTotals.assInc,
-                  intAdd: currentTotals.intAdd,
-                  mensualite: currentTotals.mensualite,
-                  statut: 'PAYÉE', // Placeholder, unused in total row
-                },
-                true
-              )}
-              {filteredData.length === 0 && (
-                <tr>
-                    <td colSpan={10} className="p-4 text-center text-gray-500">
-                        Aucune échéance trouvée pour ce statut.
-                    </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            {/* Totals Row */}
+            {renderRow(
+              {
+                n: 0,
+                echeance: '',
+                capitalRestant: 0, // Not summed
+                amortissement: amortizationTotals.amortissement,
+                interets: amortizationTotals.interets,
+                assVie: amortizationTotals.assVie,
+                assInc: amortizationTotals.assInc,
+                intAdd: amortizationTotals.intAdd,
+                mensualite: amortizationTotals.mensualite,
+                statut: 'PAYÉE', // Placeholder, unused in total row
+              },
+              true
+            )}
+          </tbody>
+        </table>
       </section>
     </div>
   );
